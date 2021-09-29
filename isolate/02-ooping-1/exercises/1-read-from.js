@@ -1,29 +1,33 @@
-'use strict';
+"use strict";
 
 const obj = {
   a: 0,
-  getA: function () { },
-  sumAB: function (b) { },
+  getA() {
+    return this.a;
+  },
+  sumAB(b) {
+    return this.a + b;
+  },
 };
 
 const test1 = obj.getA() === 0;
-console.assert(test1, 'Test 1');
+console.assert(test1, "Test 1");
 
 const test2 = obj.sumAB(1) === 1;
-console.assert(test2, 'Test 2');
+console.assert(test2, "Test 2");
 
 obj.a = 4;
 
 const test3 = obj.getA() === 4;
-console.assert(test3, 'Test 3');
+console.assert(test3, "Test 3");
 
 const test4 = obj.sumAB(1) === 5;
-console.assert(test4, 'Test 4');
+console.assert(test4, "Test 4");
 
 obj.a = -2;
 
 const test5 = obj.getA() === -2;
-console.assert(test5, 'Test 5');
+console.assert(test5, "Test 5");
 
 const test6 = obj.sumAB(1) === -1;
-console.assert(test6, 'Test 6');
+console.assert(test6, "Test 6");
