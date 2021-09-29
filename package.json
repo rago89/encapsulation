@@ -12,5 +12,8 @@
   "bugs": {
     "url": "https://github.com/HackYourFutureBelgium/encapsulation/issues"
   },
-  "homepage": "https://github.com/HackYourFutureBelgium/encapsulation#readme"
+  "homepage": "https://github.com/HackYourFutureBelgium/encapsulation#readme",
+  "devDependencies": {
+    "prettier": "^2.4.1"
+  }
 }
