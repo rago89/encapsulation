@@ -1,19 +1,19 @@
 {
-  "name": "encapsulation",
-  "version": "1.0.0",
-  "description": "OOP light: how it works in JS and how to use it",
-  "main": "server.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/HackYourFutureBelgium/encapsulation.git"
-  },
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/HackYourFutureBelgium/encapsulation/issues"
-  },
-  "homepage": "https://github.com/HackYourFutureBelgium/encapsulation#readme",
-  "devDependencies": {
-    "prettier": "^2.4.1"
-  }
+	"name": "encapsulation",
+	"version": "1.0.0",
+	"description": "OOP light: how it works in JS and how to use it",
+	"main": "server.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/HackYourFutureBelgium/encapsulation.git"
+	},
+	"author": "",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/HackYourFutureBelgium/encapsulation/issues"
+	},
+	"homepage": "https://github.com/HackYourFutureBelgium/encapsulation#readme",
+	"devDependencies": {
+		"prettier": "^2.4.1"
+	}
 }

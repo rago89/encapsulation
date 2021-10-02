@@ -1,60 +1,72 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
+	<head>
+		<meta charset="utf8" />
+		<title>example 5: words list</title>
+	</head>
 
-<head>
-  <meta charset='utf8'>
-  <title>example 5: words list</title>
+	<body>
+		<section id="root"></section>
 
-</head>
+		<script id="object">
+			const app = {
+				state: {
+					words: [],
+				},
+				removeWord: (arrOfWords, toRemove) => {
+					return arrOfWords.filter((word) => word !== toRemove);
+				},
+				handler: (event) => {
+					const word = event.target.form.word.value;
+					const action = event.target.value;
+					if (action === "add") {
+						state.words.push(word);
+					} else if (action === "remove") {
+						state.words = removeWord(state.words, word);
+					}
+					const newList = renderList(state.words);
+					const displayEl = document.getElementById("display-element");
+					displayEl.innerHTML = "";
+					displayEl.appendChild(newList);
+				},
+			};
+		</script>
 
-<body>
+		<script id="tests">
+			// testing the logic method of the object
+			const assert = (assertion, message) => {
+				if (assertion) {
+					console.log("%cPASS: " + message, "color:green");
+				} else {
+					console.log("%cFAIL: " + message, "color:red");
+				}
+			};
 
-  <section id='root'></section>
+			assert(obj.state.words.toString() === "", "Test 0");
 
-  <script id='object'>
-    const app = {
-    }
+			obj.state.words = ["a", "b", "c"];
+			obj.removeWord("a");
+			assert(obj.state.words.toString() === "b,c", "Test 1");
 
-  </script>
+			obj.state.words = ["a", "b", "c"];
+			obj.removeWord("d");
+			assert(obj.state.words.toString() === "a,b,c", "Test 2");
 
-  <script id='tests'>
-    // testing the logic method of the object
-    const assert = (assertion, message) => {
-      if (assertion) {
-        console.log('%cPASS: ' + message, 'color:green');
-      } else {
-        console.log('%cFAIL: ' + message, 'color:red');
-      }
-    };
+			obj.state.words = ["a", "b", "c", "a"];
+			obj.removeWord("a");
+			assert(obj.state.words.toString() === "b,c", "Test 3");
 
-    assert(obj.state.words.toString() === '', 'Test 0');
+			obj.state.words = [];
+			obj.removeWord("a");
+			assert(obj.state.words.toString() === "", "Test 4");
+		</script>
 
-    obj.state.words = ['a', 'b', 'c'];
-    obj.removeWord('a');
-    assert(obj.state.words.toString() === 'b,c', 'Test 1');
+		<script id="init">
+			const titleString = "words list";
 
-    obj.state.words = ['a', 'b', 'c'];
-    obj.removeWord('d');
-    assert(obj.state.words.toString() === 'a,b,c', 'Test 2');
+			const appView = app.render(titleString);
 
-    obj.state.words = ['a', 'b', 'c', 'a'];
-    obj.removeWord('a');
-    assert(obj.state.words.toString() === 'b,c', 'Test 3');
-
-    obj.state.words = [];
-    obj.removeWord('a');
-    assert(obj.state.words.toString() === '', 'Test 4');
-  </script>
-
-  <script id='init'>
-    const titleString = 'words list';
-
-    const appView = app.render(titleString);
-
-    document.getElementById('root')
-      .appendChild(appView);
-  </script>
-
-</body>
-
+			document.getElementById("root").appendChild(appView);
+		</script>
+	</body>
 </html>

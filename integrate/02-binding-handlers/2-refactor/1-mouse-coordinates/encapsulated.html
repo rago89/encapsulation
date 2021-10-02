@@ -1,47 +1,55 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
+	<head>
+		<meta charset="utf8" />
+		<title>refactor 1: mouse coordinates</title>
 
-<head>
-  <meta charset='utf8'>
-  <title>refactor 1: mouse coordinates</title>
+		<style>
+			.full-screen {
+				height: 100vh;
+				width: 100vw;
+			}
+		</style>
+	</head>
 
-  <style>
-    .full-screen {
-      height: 100vh;
-      width: 100vw;
-    }
-  </style>
-</head>
+	<body>
+		<section id="root"></section>
 
-<body>
+		<script id="object">
+			const app = {
+				state: {
+					x: 0,
+					y: 0,
+				},
+				renderState: function () {
+					return `X: ${this.state.x}, Y: ${this.state.y}`;
+				},
+				handler: function (element, event) {
+					this.state.x = Number(event.x);
+					this.state.y = Number(event.y);
+					element.innerHTML = this.renderState(this.state);
+				},
+				render: function (id) {
+					const container = document.createElement("div");
+					container.className = "full-screen";
+					container.id = id;
 
-  <section id='root'></section>
+					const outputEl = document.createElement("p");
+					outputEl.innerHTML = this.renderState(this.state);
+					outputEl.id = "output-element";
+					container.appendChild(outputEl);
+					container.onmousemove = this.handler.bind(this, outputEl);
+					return container;
+				},
+			};
+		</script>
 
-  <script id='object'>
-    const app = {
-      state: {
-      },
-      renderState: function () {
+		<script id="init">
+			const titleString = "mouse coordinates";
 
-      },
-      handler: function (element, event) {
+			const appView = app.render(titleString);
 
-      },
-      render: function (id) {
-
-      },
-    }
-  </script>
-
-  <script id='init'>
-    const titleString = 'mouse coordinates';
-
-    const appView = app.render(titleString);
-
-    document.getElementById('root')
-      .appendChild(appView);
-  </script>
-
-</body>
-
+			document.getElementById("root").appendChild(appView);
+		</script>
+	</body>
 </html>

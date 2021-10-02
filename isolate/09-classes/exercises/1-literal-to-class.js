@@ -1,31 +1,42 @@
 // the challenge
 
 const literalA = {
-  numbers: [-1, 1, 0, -2, 2],
-  get evens() {
-    return this.numbers.filter(num => num % 2 === 0);
-  },
-  get odds() {
-    return this.numbers.filter(num => num % 2 !== 0);
-  },
+	numbers: [-1, 1, 0, -2, 2],
+	get evens() {
+		return this.numbers.filter((num) => num % 2 === 0);
+	},
+	get odds() {
+		return this.numbers.filter((num) => num % 2 !== 0);
+	},
 };
 
 const literalB = {
-  numbers: [3, 67, -21, 6, -4],
-  get evens() {
-    return this.numbers.filter(num => num % 2 === 0);
-  },
-  get odds() {
-    return this.numbers.filter(num => num % 2 !== 0);
-  },
+	numbers: [3, 67, -21, 6, -4],
+	get evens() {
+		return this.numbers.filter((num) => num % 2 === 0);
+	},
+	get odds() {
+		return this.numbers.filter((num) => num % 2 !== 0);
+	},
 };
 
 // the solution
 
-class EvenOdd {}
+class EvenOdd {
+	numbers = [];
+	constructor(numbers = []) {
+		this.numbers = numbers;
+	}
+	get evens() {
+		return this.numbers.filter((num) => num % 2 === 0);
+	}
+	get odds() {
+		return this.numbers.filter((num) => num % 2 !== 0);
+	}
+}
 
-const instanceA = _;
-const instanceB = _;
+const instanceA = new EvenOdd([-1, 1, 0, -2, 2]);
+const instanceB = new EvenOdd([3, 67, -21, 6, -4]);
 
 // the tests
 
@@ -40,9 +51,9 @@ console.assert(test2a, 'Test 2.A - own properties');
 console.assert(test2b, 'Test 2.B');
 
 const test3a =
-  !instanceA.hasOwnProperty('evens') && !instanceA.hasOwnProperty('odds');
+	!instanceA.hasOwnProperty('evens') && !instanceA.hasOwnProperty('odds');
 const test3b =
-  !instanceB.hasOwnProperty('evens') && !instanceB.hasOwnProperty('odds');
+	!instanceB.hasOwnProperty('evens') && !instanceB.hasOwnProperty('odds');
 console.assert(test3a, 'Test 3.A - not-own properties');
 console.assert(test3b, 'Test 3.B');
 

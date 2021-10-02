@@ -37,7 +37,7 @@
       const inputEl = document.createElement('input');
       inputEl.type = 'text';
       inputEl.placeholder = 'type here';
-      inputEl.onkeyup = handler;
+      inputEl.addEventListener('keyup',handler);
 
       const container = document.createElement('div');
       container.id = id;

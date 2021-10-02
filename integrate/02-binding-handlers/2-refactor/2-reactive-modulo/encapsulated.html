@@ -1,82 +1,132 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
+	<head>
+		<meta charset="utf8" />
+		<title>refactor 2: reactive modulo</title>
+	</head>
 
-<head>
-  <meta charset='utf8'>
-  <title>refactor 2: reactive modulo</title>
-</head>
+	<body>
+		<section id="root"></section>
 
-<body>
+		<script id="object">
+			const app = {
+				state: {
+					number: 3,
+					modulo: 2,
+					result: 1,
+				},
+				updateState: function (num, mod) {
+					this.state.number = num;
+					this.state.modulo = mod;
+					this.state.result = num % mod;
+				},
+				handler: function (output, event) {
+					// read input from user
+					const form = event.target.form;
+					const newNum = Number(form.newNum.value);
+					const newMod = Number(form.newMod.value);
 
-  <section id='root'></section>
+					// update state
+					this.updateState(newNum, newMod);
 
-  <script id='object'>
+					// render state to the UI
+					output.innerHTML = this.state.result;
+				},
+				render: function (id) {
+					const outputEl = document.createElement("code");
+					outputEl.marginLeft = "5%";
+					outputEl.id = "output-element";
+					outputEl.innerHTML = this.state.result;
 
-    const app = {
-      state: {
+					const numInputEl = document.createElement("input");
+					numInputEl.type = "number";
+					numInputEl.name = "newNum";
+					numInputEl.value = this.state.number;
+					numInputEl.onclick = this.handler.bind(this, outputEl);
 
-      },
-      updateState: function (num, mod) {
+					const modInputEl = document.createElement("input");
+					modInputEl.type = "number";
+					modInputEl.name = "newMod";
+					modInputEl.value = this.state.modulo;
+					modInputEl.onclick = this.handler.bind(this, outputEl);
 
-      },
-      handler: function (output, event) {
-        // read input from user
+					const formEl = document.createElement("form");
+					formEl.appendChild(numInputEl);
+					formEl.appendChild(document.createTextNode(" % "));
+					formEl.appendChild(modInputEl);
+					formEl.appendChild(document.createTextNode(" = "));
+					formEl.appendChild(outputEl);
 
-        // update state
-        this.updateState(newNum, newMod);
+					const container = document.createElement("div");
+					container.appendChild(formEl);
+					container.id = id;
 
-        // render state to the UI
+					return container;
+				},
+			};
+		</script>
 
-      },
-      render: function (id) {
+		<script id="tests">
+			const assert = (assertion, message) => {
+				if (assertion) {
+					console.log("%cPASS: " + message, "color:green");
+				} else {
+					console.log("%cFAIL: " + message, "color:red");
+				}
+			};
 
-      },
-    }
-  </script>
+			assert(
+				JSON.stringify(app.state) === '{"number":3,"modulo":2,"result":1}',
+				"Test 0"
+			);
 
-  <script id='tests'>
-    const assert = (assertion, message) => {
-      if (assertion) {
-        console.log('%cPASS: ' + message, 'color:green');
-      } else {
-        console.log('%cFAIL: ' + message, 'color:red');
-      }
-    };
+			app.updateState(3, 2);
+			assert(
+				JSON.stringify(app.state) === '{"number":3,"modulo":2,"result":1}',
+				"Test 1"
+			);
 
-    assert(JSON.stringify(app.state) === '{"number":3,"modulo":2,"result":1}', 'Test 0');
+			app.updateState(2, 3);
+			assert(
+				JSON.stringify(app.state) === '{"number":2,"modulo":3,"result":2}',
+				"Test 2"
+			);
 
-    app.updateState(3, 2);
-    assert(JSON.stringify(app.state) === '{"number":3,"modulo":2,"result":1}', 'Test 1');
+			app.updateState(-1, 1);
+			assert(
+				JSON.stringify(app.state) === '{"number":-1,"modulo":1,"result":0}',
+				"Test 3"
+			);
 
-    app.updateState(2, 3);
-    assert(JSON.stringify(app.state) === '{"number":2,"modulo":3,"result":2}', 'Test 2');
+			app.updateState(12, 4);
+			assert(
+				JSON.stringify(app.state) === '{"number":12,"modulo":4,"result":0}',
+				"Test 4"
+			);
 
-    app.updateState(-1, 1);
-    assert(JSON.stringify(app.state) === '{"number":-1,"modulo":1,"result":0}', 'Test 3');
+			app.updateState(8, -5);
+			assert(
+				JSON.stringify(app.state) === '{"number":8,"modulo":-5,"result":3}',
+				"Test 5"
+			);
 
-    app.updateState(12, 4);
-    assert(JSON.stringify(app.state) === '{"number":12,"modulo":4,"result":0}', 'Test 4');
+			app.state = {
+				number: 3,
+				modulo: 2,
+				result: 1,
+			};
+			assert(
+				JSON.stringify(app.state) === '{"number":3,"modulo":2,"result":1}',
+				"Test 6"
+			);
+		</script>
 
-    app.updateState(8, -5);
-    assert(JSON.stringify(app.state) === '{"number":8,"modulo":-5,"result":3}', 'Test 5');
+		<script id="init">
+			const titleString = "reactive modulo";
 
-    app.state = {
-      number: 3,
-      modulo: 2,
-      result: 1
-    };
-    assert(JSON.stringify(app.state) === '{"number":3,"modulo":2,"result":1}', 'Test 6');
-  </script>
+			const appView = app.render(titleString);
 
-  <script id='init'>
-    const titleString = 'reactive modulo';
-
-    const appView = app.render(titleString);
-
-    document.getElementById('root')
-      .appendChild(appView);
-  </script>
-
-</body>
-
+			document.getElementById("root").appendChild(appView);
+		</script>
+	</body>
 </html>

@@ -8,7 +8,7 @@
 </head>
 
 <body>
-
+   
   <section id='root'></section>
 
   <script id='data'>
@@ -17,8 +17,9 @@
       sum: 0,
       howMany: 0
     };
+    console.log(state)
   </script>
-
+   
   <script id='handler'>
     const handler = (event) => {
       const newNumberStr = event.target.form.newNumber.value;

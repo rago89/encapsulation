@@ -1,88 +1,121 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
+	<head>
+		<meta charset="utf8" />
+		<title>refactor 2: reactive modulo</title>
+	</head>
 
-<head>
-  <meta charset='utf8'>
-  <title>refactor 2: reactive modulo</title>
-</head>
+	<body>
+		<section id="root"></section>
 
-<body>
+		<script id="object">
+			const app = {
+				state: {
+					charCode: 0,
+				},
+				set code(newNum) {
+					return (this.state.charCode = ((newNum % 256) + 256) % 256);
+				},
+				get char() {
+					return String.fromCharCode(this.state.charCode);
+				},
+				handler: function (display, event) {
+					const inputNumber = Number(event.target.value);
+					this.code = inputNumber;
+					display.innerHTML = this.char;
+				},
+				render: function (id) {
+					const outputEl = document.createElement("code");
+					outputEl.style.marginLeft = "8%";
+					outputEl.id = "output-element";
 
-  <section id='root'></section>
+					const inputEl = document.createElement("input");
+					inputEl.type = "number";
+					inputEl.value = "0";
+					inputEl.onchange = this.handler.bind(this, outputEl);
 
-  <script id='object'>
-    const app = {
-      state: {
-        charCode: 0
-      },
-      set code(newNum) {
+					const container = document.createElement("div");
+					container.id = id;
+					container.appendChild(inputEl);
+					container.appendChild(outputEl);
+					return container;
+				},
+			};
+		</script>
 
-      },
-      get char() {
+		<script id="tests">
+			const assert = (assertion, message) => {
+				if (assertion) {
+					console.log("%cPASS: " + message, "color:green");
+				} else {
+					console.log("%cFAIL: " + message, "color:red");
+				}
+			};
 
-      },
-      handler: function (display, event) {
+			assert(
+				JSON.stringify(app.state) === '{"charCode":0}',
+				"Test 1 - initial state"
+			);
 
-      },
-      render: function (id) {
+			app.code = 1;
+			assert(JSON.stringify(app.state) === '{"charCode":1}', "Test 2 - set code");
 
-      },
-    }
+			const char3 = app.char;
+			assert(char3 === "", "Test 3 a - get char");
+			assert(
+				JSON.stringify(app.state) === '{"charCode":1}',
+				"Test 3 b - check for side-effects"
+			);
 
-  </script>
+			app.code = -1;
+			assert(
+				JSON.stringify(app.state) === '{"charCode":255}',
+				"Test 4 - set code"
+			);
 
-  <script id='tests'>
-    const assert = (assertion, message) => {
-      if (assertion) {
-        console.log('%cPASS: ' + message, 'color:green');
-      } else {
-        console.log('%cFAIL: ' + message, 'color:red');
-      }
-    };
+			const char5 = app.char;
+			assert(char5 === "ÿ", "Test 5 a - get char");
+			assert(
+				JSON.stringify(app.state) === '{"charCode":255}',
+				"Test 5 b - check for side-effects"
+			);
 
-    assert(JSON.stringify(app.state) === '{"charCode":0}', 'Test 1 - initial state');
+			app.code = 111;
+			assert(
+				JSON.stringify(app.state) === '{"charCode":111}',
+				"Test 6 - set code"
+			);
 
-    app.code = 1;
-    assert(JSON.stringify(app.state) === '{"charCode":1}', 'Test 2 - set code');
+			const char7 = app.char;
+			assert(char7 === "o", "Test 7 a - get char");
+			assert(
+				JSON.stringify(app.state) === '{"charCode":111}',
+				"Test 7 b - check for side-effects"
+			);
 
-    const char3 = app.char;
-    assert(char3 === '', 'Test 3 a - get char');
-    assert(JSON.stringify(app.state) === '{"charCode":1}', 'Test 3 b - check for side-effects');
+			app.code = -145;
+			assert(
+				JSON.stringify(app.state) === '{"charCode":111}',
+				"Test 8 - set code"
+			);
 
-    app.code = -1;
-    assert(JSON.stringify(app.state) === '{"charCode":255}', 'Test 4 - set code');
+			const char9 = app.char;
+			assert(char9 === "o", "Test 9 a - get char");
+			assert(
+				JSON.stringify(app.state) === '{"charCode":111}',
+				"Test 9 b - check for side-effects"
+			);
 
-    const char5 = app.char;
-    assert(char5 === 'ÿ', 'Test 5 a - get char');
-    assert(JSON.stringify(app.state) === '{"charCode":255}', 'Test 5 b - check for side-effects');
+			app.code = 0;
+			assert(JSON.stringify(app.state) === '{"charCode":0}', "Test 10 - set char");
+		</script>
 
-    app.code = 111;
-    assert(JSON.stringify(app.state) === '{"charCode":111}', 'Test 6 - set code');
+		<script id="init">
+			const titleString = "reactive modulo";
 
-    const char7 = app.char;
-    assert(char7 === 'o', 'Test 7 a - get char');
-    assert(JSON.stringify(app.state) === '{"charCode":111}', 'Test 7 b - check for side-effects');
+			const appView = app.render(titleString);
 
-    app.code = -145;
-    assert(JSON.stringify(app.state) === '{"charCode":111}', 'Test 8 - set code');
-
-    const char9 = app.char;
-    assert(char9 === 'o', 'Test 9 a - get char');
-    assert(JSON.stringify(app.state) === '{"charCode":111}', 'Test 9 b - check for side-effects');
-
-    app.code = 0;
-    assert(JSON.stringify(app.state) === '{"charCode":0}', 'Test 10 - set char');
-  </script>
-
-  <script id='init'>
-    const titleString = 'reactive modulo';
-
-    const appView = app.render(titleString);
-
-    document.getElementById('root')
-      .appendChild(appView);
-  </script>
-
-</body>
-
+			document.getElementById("root").appendChild(appView);
+		</script>
+	</body>
 </html>

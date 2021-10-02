@@ -1,18 +1,37 @@
 'use strict';
 
 const MaxMinPrototype = {
-  get spread() {
-    return this.state.max - this.state.min;
-  },
-  addNumber(newNum) {
-    // ... code ...
-  },
+	get spread() {
+		return this.state.max - this.state.min;
+	},
+
+	addNumber(newValue) {
+		if (typeof newValue !== 'number') {
+			return false;
+		}
+
+		this.state.all.push(newValue);
+		if (newValue > this.state.biggest) {
+			this.state.biggest = newValue;
+		}
+		if (newValue < this.state.smallest) {
+			this.state.smallest = newValue;
+		}
+
+		return true;
+	},
 };
 
 // write the class
 //  hint: state ---> { min: 'number', max: 'number' }
 
-class MaxMin {}
+class MaxMin {
+	state = {
+		biggest: -Infinity,
+		smallest: Infinity,
+		all: [],
+	};
+}
 
 // these two lines are correct! don't change them
 const instanceA = new MaxMin();
@@ -31,17 +50,21 @@ console.assert(test2a, 'Test 2.A - own properties');
 console.assert(test2b, 'Test 2.B');
 
 const test3a =
-  !instanceA.hasOwnProperty('spread') && !instanceA.hasOwnProperty('addNumber');
+	!instanceA.hasOwnProperty('spread') && !instanceA.hasOwnProperty('addNumber');
 const test3b =
-  !instanceB.hasOwnProperty('spread') && !instanceB.hasOwnProperty('addNumber');
+	!instanceB.hasOwnProperty('spread') && !instanceB.hasOwnProperty('addNumber');
 console.assert(test3a, 'Test 3.A - not-own properties');
 console.assert(test3b, 'Test 3.B');
 
 // why do the initial values need to be Infinity and -Infinity?
+// Checks against the minimum value ever exist
+// Math.min(); // Infinity
+// Math.max(); // -Infinity
+
 const test4a =
-  instanceA.state.max === -Infinity && instanceA.state.min === Infinity;
+	instanceA.state.max === -Infinity && instanceA.state.min === Infinity;
 const test4b =
-  instanceA.state.max === -Infinity && instanceA.state.min === Infinity;
+	instanceA.state.max === -Infinity && instanceA.state.min === Infinity;
 console.assert(test4a, 'Test 4.A - initial values');
 console.assert(test4b, 'Test 4.B');
 
